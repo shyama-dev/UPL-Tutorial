@@ -3,6 +3,7 @@ package com.upl.tutorial.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,9 +18,9 @@ public class Tutorial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tutorial_id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id" , nullable=false)
-    private Course course_id;
+    private Course course;
 
     private String title;
 
@@ -31,23 +32,17 @@ public class Tutorial {
     private LocalDateTime createed_at;   
 
     public Tutorial() {
-    }    
+    }
 
-   
-
-
-    public Tutorial(int tutorial_id, Course course_id, String title, String content, String youtube_link,
+    public Tutorial(int tutorial_id, Course course, String title, String content, String youtube_link,
             LocalDateTime createed_at) {
         this.tutorial_id = tutorial_id;
-        this.course_id = course_id;
+        this.course = course;
         this.title = title;
         this.content = content;
         this.youtube_link = youtube_link;
         this.createed_at = createed_at;
     }
-
-
-
 
     public int getTutorial_id() {
         return tutorial_id;
@@ -57,12 +52,12 @@ public class Tutorial {
         this.tutorial_id = tutorial_id;
     }
 
-    public Course getCourse_id() {
-        return course_id;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourse_id(Course course_id) {
-        this.course_id = course_id;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public String getTitle() {
@@ -97,13 +92,13 @@ public class Tutorial {
         this.createed_at = createed_at;
     }
 
-
     @Override
     public String toString() {
-        return "Tutorial [tutorial_id=" + tutorial_id + ", course_id=" + course_id + ", title=" + title + ", content="
+        return "Tutorial [tutorial_id=" + tutorial_id + ", course=" + course + ", title=" + title + ", content="
                 + content + ", youtube_link=" + youtube_link + ", createed_at=" + createed_at + "]";
-    }
-
+    }    
+  
+    
         
 
 }

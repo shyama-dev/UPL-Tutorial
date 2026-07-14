@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +25,7 @@ public class Course {
     @Lob
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", nullable = false)
     private User instructor;
 
@@ -33,12 +34,9 @@ public class Course {
 
     private LocalDateTime created_at;
 
-
-    
     public Course() {
     }
 
-    
     public Course(int course_id, String title, String description, User instructor, CourseStatus status,
             LocalDateTime created_at) {
         this.course_id = course_id;
@@ -48,7 +46,6 @@ public class Course {
         this.status = status;
         this.created_at = created_at;
     }
-
 
     public int getCourse_id() {
         return course_id;
@@ -98,14 +95,11 @@ public class Course {
         this.created_at = created_at;
     }
 
-
     @Override
     public String toString() {
         return "Course [course_id=" + course_id + ", title=" + title + ", description=" + description + ", instructor="
                 + instructor + ", status=" + status + ", created_at=" + created_at + "]";
     }
-
-        
 
 }
 

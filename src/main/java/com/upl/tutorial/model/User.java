@@ -24,17 +24,17 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole role;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private UserStatus status;
 
     private LocalDateTime created_at;
 
     public User() {
     }
 
-    public User(int user_id, String name, String email, String password, Role role, Status status,
+    public User(int user_id, String name, String email, String password, UserRole role, UserStatus status,
             LocalDateTime created_at) {
         this.user_id = user_id;
         this.name = name;
@@ -77,19 +77,19 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
-    public Status getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 
@@ -101,15 +101,14 @@ public class User {
         this.created_at = created_at;
     }
 
+    @Override
+    public String toString() {
+        return "User [user_id=" + user_id + ", name=" + name + ", email=" + email + ", password=" + password + ", role="
+                + role + ", status=" + status + ", created_at=" + created_at + "]";
+    }
+
+    
+
 }
 
-enum Role {
-    Admin,
-    Instructor
-};
 
-enum Status {
-    Active,
-    Pending,
-    Rejected
-};

@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -105,12 +104,6 @@ public class InstructorApproval {
                 + status + ", remarks=" + remarks + ", timestamp=" + timestamp + "]";
     }
 
-    
-    
+        
 } 
 
-enum ApprovalStatus{
-
-    Approved, 
-    Rejected
-}

@@ -102,8 +102,3 @@ public class Course {
     }
 
 }
-
-enum CourseStatus {
-    Active,
-    Inactive
-};

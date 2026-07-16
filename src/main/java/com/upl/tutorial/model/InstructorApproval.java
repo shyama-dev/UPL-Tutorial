@@ -2,6 +2,7 @@ package com.upl.tutorial.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +19,8 @@ public class InstructorApproval {
 
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int log_id;
+    @Column(name = "log_id")
+    private int logId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,9 +42,9 @@ public class InstructorApproval {
     public InstructorApproval() {
     }
 
-    public InstructorApproval(int log_id, User instructor, User admin, ApprovalStatus status, String remarks,
+    public InstructorApproval(int logId, User instructor, User admin, ApprovalStatus status, String remarks,
             LocalDateTime timestamp) {
-        this.log_id = log_id;
+        this.logId = logId;
         this.instructor = instructor;
         this.admin = admin;
         this.status = status;
@@ -50,12 +52,12 @@ public class InstructorApproval {
         this.timestamp = timestamp;
     }
 
-    public int getLog_id() {
-        return log_id;
+    public int getlogId() {
+        return logId;
     }
 
-    public void setLog_id(int log_id) {
-        this.log_id = log_id;
+    public void setlogId(int logId) {
+        this.logId = logId;
     }
 
     public User getInstructor() {
@@ -100,7 +102,7 @@ public class InstructorApproval {
 
     @Override
     public String toString() {
-        return "InstructorApproval [log_id=" + log_id + ", instructor=" + instructor + ", admin=" + admin + ", status="
+        return "InstructorApproval [logId=" + logId + ", instructor=" + instructor + ", admin=" + admin + ", status="
                 + status + ", remarks=" + remarks + ", timestamp=" + timestamp + "]";
     }
 

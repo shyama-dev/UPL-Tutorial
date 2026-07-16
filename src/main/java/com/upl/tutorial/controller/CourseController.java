@@ -24,8 +24,8 @@ public class CourseController {
     CourseService service;
 
      @GetMapping
-     public ResponseEntity<List<CourseResponse>> courses(@RequestParam int instructor_id){
-      List<CourseResponse> courses =service.courses(instructor_id);
+     public ResponseEntity<List<CourseResponse>> courses(@RequestParam int instructorId){
+      List<CourseResponse> courses =service.courses(instructorId);
 
       return ResponseEntity.status(HttpStatus.OK).body(courses);
    

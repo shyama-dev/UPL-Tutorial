@@ -30,11 +30,11 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(UserRole.Instructor);
         user.setStatus(UserStatus.Pending);
-        user.setCreated_at(LocalDateTime.now());
+        user.setcreatedAt(LocalDateTime.now());
 
         User userSaved = userRepo.save(user);
         System.out.println("userSaved  :" + userSaved);
-        return new UserResponse(userSaved.getUser_id());
+        return new UserResponse(userSaved.getuserId());
 
     }
 
@@ -46,7 +46,7 @@ public class UserService {
             return userResponse;
         }
         userResponse.setRole(user.getRole().name());
-        userResponse.setUserId(user.getUser_id());
+        userResponse.setUserId(user.getuserId());
 
         if(passwordEncoder.matches(password, user.getPassword())){
 

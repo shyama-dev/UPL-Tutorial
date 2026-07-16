@@ -2,6 +2,7 @@ package com.upl.tutorial.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +18,8 @@ public class CourseHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int history_id;
+    @Column(name = "history_id")
+    private int historyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
@@ -28,26 +30,27 @@ public class CourseHistory {
     private User instructor;
 
     private String changes;
-
-    private LocalDateTime modified_at;
+    
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
 
     public CourseHistory() {
     }
 
-    public CourseHistory(int history_id, Course course, User instructor, String changes, LocalDateTime modified_at) {
-        this.history_id = history_id;
+    public CourseHistory(int historyId, Course course, User instructor, String changes, LocalDateTime modifiedAt) {
+        this.historyId = historyId;
         this.course = course;
         this.instructor = instructor;
         this.changes = changes;
-        this.modified_at = modified_at;
+        this.modifiedAt = modifiedAt;
     }
 
-    public int getHistory_id() {
-        return history_id;
+    public int gethistoryId() {
+        return historyId;
     }
 
-    public void setHistory_id(int history_id) {
-        this.history_id = history_id;
+    public void sethistoryId(int historyId) {
+        this.historyId = historyId;
     }
 
     public Course getCourse() {
@@ -74,18 +77,18 @@ public class CourseHistory {
         this.changes = changes;
     }
 
-    public LocalDateTime getModified_at() {
-        return modified_at;
+    public LocalDateTime getmodifiedAt() {
+        return modifiedAt;
     }
 
-    public void setModified_at(LocalDateTime modified_at) {
-        this.modified_at = modified_at;
+    public void setmodifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
     }
 
     @Override
     public String toString() {
-        return "CourseHistory [history_id=" + history_id + ", course=" + course + ", instructor=" + instructor
-                + ", changes=" + changes + ", modified_at=" + modified_at + "]";
+        return "CourseHistory [historyId=" + historyId + ", course=" + course + ", instructor=" + instructor
+                + ", changes=" + changes + ", modifiedAt=" + modifiedAt + "]";
     }
 
     

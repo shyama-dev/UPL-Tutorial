@@ -2,6 +2,7 @@ package com.upl.tutorial.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,8 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int course_id;
+    @Column(name = "course_id")
+    private int courseId;
 
     private String title;
 
@@ -31,28 +33,29 @@ public class Course {
 
     @Enumerated(EnumType.STRING)
     private CourseStatus status;
-
-    private LocalDateTime created_at;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public Course() {
     }
 
-    public Course(int course_id, String title, String description, User instructor, CourseStatus status,
-            LocalDateTime created_at) {
-        this.course_id = course_id;
+    public Course(int courseId, String title, String description, User instructor, CourseStatus status,
+            LocalDateTime createdAt) {
+        this.courseId = courseId;
         this.title = title;
         this.description = description;
         this.instructor = instructor;
         this.status = status;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
     }
 
-    public int getCourse_id() {
-        return course_id;
+    public int getcourseId() {
+        return courseId;
     }
 
-    public void setCourse_id(int course_id) {
-        this.course_id = course_id;
+    public void setcourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public String getTitle() {
@@ -87,18 +90,18 @@ public class Course {
         this.status = status;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getcreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setcreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
     public String toString() {
-        return "Course [course_id=" + course_id + ", title=" + title + ", description=" + description + ", instructor="
-                + instructor + ", status=" + status + ", created_at=" + created_at + "]";
+        return "Course [courseId=" + courseId + ", title=" + title + ", description=" + description + ", instructor="
+                + instructor + ", status=" + status + ", createdAt=" + createdAt + "]";
     }
 
 }

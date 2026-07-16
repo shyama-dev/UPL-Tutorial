@@ -3,7 +3,6 @@ package com.upl.tutorial.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,20 +28,23 @@ public class CourseService {
 
     public int create(CourseRequest request) {
 
-        Optional<User> instructor = userRepo.findById(request.getInstructor_id());
-        if (instructor.isPresent() && instructor.get().getStatus().equals(UserStatus.Active)) {
+        User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
+            ()-> new InstructorNotActiveException("Instructor not approved for id "+request.getInstructorId())
+        );
+        if (instructor.getStatus().equals(UserStatus.Active)) {
             Course course = new Course();
-            course.setInstructor(instructor.get());
+            course.setInstructor(instructor);
             course.setDescription(request.getDescription());
             course.setStatus(CourseStatus.Active);
             course.setTitle(request.getTitle());
-            course.setCreated_at(LocalDateTime.now());
+            course.setcreatedAt(LocalDateTime.now());
             Course savedCourse = courseRepo.save(course);
             System.out.println(" Saved Course :" + savedCourse);
-            return savedCourse.getCourse_id();
+            return savedCourse.getcourseId();
 
         } else {
-            throw new InstructorNotActiveException("Instructor not approved");
+            throw new InstructorNotActiveException("Instructor not "
+            +"in active status for id :"+request.getInstructorId());
 
         }
 
@@ -50,12 +52,12 @@ public class CourseService {
 
     public List<CourseResponse> courses(int instructor_id) {
 
-        List<Course> courseList = courseRepo.fetchCoursesByInstructor(instructor_id);
+        List<Course> courseList = courseRepo.findByInstructor_userId(instructor_id);
         System.out.println(" Courses list :"+courseList);
         List<CourseResponse> responseList = courseList.stream()
-                .map(course -> new CourseResponse(course.getCourse_id(), course.getTitle(),
-                 course.getDescription(),course.getInstructor().getUser_id(), 
-                 course.getStatus().name(),course.getCreated_at())).toList();
+                .map(course -> new CourseResponse(course.getcourseId(), course.getTitle(),
+                 course.getDescription(),course.getInstructor().getuserId(), 
+                 course.getStatus().name(),course.getcreatedAt())).toList();
         return responseList;
     }
 

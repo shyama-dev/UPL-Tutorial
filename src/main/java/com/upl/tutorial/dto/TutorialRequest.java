@@ -5,16 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor 
+@NoArgsConstructor
 @AllArgsConstructor
-public class CourseRequest {
+public class TutorialRequest {
+
+     private int courseId;
 
     private String title;
     
-    private String description;
+    private String content;
 
-    private int instructorId;
+    private String youtubeLink;
 
-    private String status;
-        
+    
 }

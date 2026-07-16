@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CourseResponse {
     
-    private int course_id;
+    private int courseId;
     private String title;    
     private String description;
-    private int instructor_id;
+    private int instructorId;
     private String status;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
        
 }

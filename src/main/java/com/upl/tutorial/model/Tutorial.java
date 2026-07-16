@@ -2,6 +2,7 @@ package com.upl.tutorial.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,8 @@ public class Tutorial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int tutorial_id;
+    @Column(name = "tutorial_id")
+    private int tutorialId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id" , nullable=false)
@@ -26,30 +28,32 @@ public class Tutorial {
 
     @Lob
     private String content;
+    
+    @Column(name = "youtube_link")
+    private String youtubeLink;
 
-    private String youtube_link;
-
-    private LocalDateTime createed_at;   
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;   
 
     public Tutorial() {
     }
 
-    public Tutorial(int tutorial_id, Course course, String title, String content, String youtube_link,
-            LocalDateTime createed_at) {
-        this.tutorial_id = tutorial_id;
+    public Tutorial(int tutorialId, Course course, String title, String content, String youtubeLink,
+            LocalDateTime createdAt) {
+        this.tutorialId = tutorialId;
         this.course = course;
         this.title = title;
         this.content = content;
-        this.youtube_link = youtube_link;
-        this.createed_at = createed_at;
+        this.youtubeLink = youtubeLink;
+        this.createdAt = createdAt;
     }
 
-    public int getTutorial_id() {
-        return tutorial_id;
+    public int gettutorialId() {
+        return tutorialId;
     }
 
-    public void setTutorial_id(int tutorial_id) {
-        this.tutorial_id = tutorial_id;
+    public void settutorialId(int tutorialId) {
+        this.tutorialId = tutorialId;
     }
 
     public Course getCourse() {
@@ -76,26 +80,26 @@ public class Tutorial {
         this.content = content;
     }
 
-    public String getYoutube_link() {
-        return youtube_link;
+    public String getyoutubeLink() {
+        return youtubeLink;
     }
 
-    public void setYoutube_link(String youtube_link) {
-        this.youtube_link = youtube_link;
+    public void setyoutubeLink(String youtubeLink) {
+        this.youtubeLink = youtubeLink;
     }
 
-    public LocalDateTime getCreateed_at() {
-        return createed_at;
+    public LocalDateTime getcreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateed_at(LocalDateTime createed_at) {
-        this.createed_at = createed_at;
+    public void setcreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
     public String toString() {
-        return "Tutorial [tutorial_id=" + tutorial_id + ", course=" + course + ", title=" + title + ", content="
-                + content + ", youtube_link=" + youtube_link + ", createed_at=" + createed_at + "]";
+        return "Tutorial [tutorialId=" + tutorialId + ", course=" + course + ", title=" + title + ", content="
+                + content + ", youtubeLink=" + youtubeLink + ", createdAt=" + createdAt + "]";
     }    
   
     

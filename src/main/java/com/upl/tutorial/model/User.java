@@ -15,7 +15,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_id;
+    @Column(name = "user_id")
+    private int userId;
 
     private String name;
 
@@ -29,28 +30,29 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public User() {
     }
 
-    public User(int user_id, String name, String email, String password, UserRole role, UserStatus status,
-            LocalDateTime created_at) {
-        this.user_id = user_id;
+    public User(int userId, String name, String email, String password, UserRole role, UserStatus status,
+            LocalDateTime createdAt) {
+        this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
         this.status = status;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getuserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setuserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -93,22 +95,18 @@ public class User {
         this.status = status;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getcreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setcreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
     public String toString() {
-        return "User [user_id=" + user_id + ", name=" + name + ", email=" + email + ", password=" + password + ", role="
-                + role + ", status=" + status + ", created_at=" + created_at + "]";
+        return "User [userId=" + userId + ", name=" + name + ", email=" + email + ", password=" + password + ", role="
+                + role + ", status=" + status + ", createdAt=" + createdAt + "]";
     }
 
-    
-
 }
-
-

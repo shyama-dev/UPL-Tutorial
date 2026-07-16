@@ -46,6 +46,7 @@ public class UserService {
             return userResponse;
         }
         userResponse.setRole(user.getRole().name());
+        userResponse.setUserId(user.getUser_id());
 
         if(passwordEncoder.matches(password, user.getPassword())){
 

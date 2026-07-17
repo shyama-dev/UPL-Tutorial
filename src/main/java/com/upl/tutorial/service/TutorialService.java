@@ -40,7 +40,7 @@ public class TutorialService {
 
     public List<TutorialResponse> fetchTutorials(int courseId) {
 
-        List<Tutorial> tutorials =tutorialRepo.findTutorialByCourseid(courseId);
+        List<Tutorial> tutorials =tutorialRepo.findByCourse_CourseId(courseId);
         List<TutorialResponse> tutorialsList = tutorials.stream().map(tutorial -> 
             new TutorialResponse(tutorial.gettutorialId(),courseId,tutorial.getTitle(),
             tutorial.getContent(),tutorial.getyoutubeLink(),tutorial.getcreatedAt())).toList();

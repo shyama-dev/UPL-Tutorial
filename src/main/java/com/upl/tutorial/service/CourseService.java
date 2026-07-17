@@ -52,7 +52,7 @@ public class CourseService {
 
     public List<CourseResponse> courses(int instructor_id) {
 
-        List<Course> courseList = courseRepo.findByInstructor_userId(instructor_id);
+        List<Course> courseList = courseRepo.findByInstructor_UserId(instructor_id);
         System.out.println(" Courses list :"+courseList);
         List<CourseResponse> responseList = courseList.stream()
                 .map(course -> new CourseResponse(course.getcourseId(), course.getTitle(),

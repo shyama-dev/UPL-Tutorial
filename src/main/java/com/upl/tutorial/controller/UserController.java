@@ -14,12 +14,15 @@ import com.upl.tutorial.dto.UserRequest;
 import com.upl.tutorial.dto.UserResponse;
 import com.upl.tutorial.service.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("instructors")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService service;
+    
+    private final UserService service;
 
      @GetMapping("/")
      public String greet(){

@@ -5,23 +5,37 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.upl.tutorial.dto.TutorialManageRequest;
 import com.upl.tutorial.dto.TutorialRequest;
 import com.upl.tutorial.dto.TutorialResponse;
 import com.upl.tutorial.exception.ResourceNotFoundException;
 import com.upl.tutorial.model.Course;
 import com.upl.tutorial.model.Tutorial;
+import com.upl.tutorial.model.TutorialHistory;
+import com.upl.tutorial.model.User;
 import com.upl.tutorial.repository.CourseRepo;
+import com.upl.tutorial.repository.TutorialHistoryRepo;
 import com.upl.tutorial.repository.TutorialRepository;
+import com.upl.tutorial.repository.UserRepository;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class TutorialService {
 
-    @Autowired
-    TutorialRepository tutorialRepo;
+    private final TutorialRepository tutorialRepo;
 
-    @Autowired
-    CourseRepo courseRepo;
+    private final CourseRepo courseRepo;
+
+     private final UserRepository userRepo;
+
+     private final TutorialHistoryRepo tutorialHistoryRepo;
+
+
 
     public int create(TutorialRequest request) {
         Tutorial tutorial =new Tutorial();
@@ -48,5 +62,33 @@ public class TutorialService {
 
         return tutorialsList;
     }
+
+    @Transactional
+    public void updateTutorial(TutorialManageRequest request) {
+
+    Tutorial tutorial =tutorialRepo.findById(request.getTutorialId()).orElseThrow(()->
+        new ResourceNotFoundException("Tutorial not found for id :"+request.getTutorialId()));
+        
+        if (null != request.getContent() && !request.getContent().isBlank())
+        tutorial.setContent(request.getContent());
+
+        if (null != request.getTitle() && !request.getTitle().isBlank())
+            tutorial.setTitle(request.getTitle());
+
+        if (null != request.getYoutubeLink() && !request.getYoutubeLink().isBlank())
+            tutorial.setyoutubeLink(request.getYoutubeLink());
+
+         User user =userRepo.findById(request.getInstructorId()).orElseThrow(()->
+        new ResourceNotFoundException("Instructor not found for id :"+request.getInstructorId()));
+
+        TutorialHistory tutorialHistory= new TutorialHistory();
+        tutorialHistory.setTutorial(tutorial);
+        tutorialHistory.setInstructor(user);
+        tutorialHistory.setChanges(request.getChanges());
+        tutorialHistory.setmodifiedAt(LocalDateTime.now());
+        tutorialHistoryRepo.save(tutorialHistory);
+    }
+
+    
     
 }

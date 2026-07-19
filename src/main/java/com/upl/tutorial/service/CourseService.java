@@ -8,35 +8,44 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.upl.tutorial.constants.UserConstants;
+import com.upl.tutorial.dto.CourseManageRequest;
 import com.upl.tutorial.dto.CoursePageRequest;
 import com.upl.tutorial.dto.CoursePageResponse;
 import com.upl.tutorial.dto.CourseRequest;
 import com.upl.tutorial.dto.CourseResponse;
 import com.upl.tutorial.dto.InstructorResponse;
 import com.upl.tutorial.exception.InstructorNotActiveException;
+import com.upl.tutorial.exception.ResourceNotFoundException;
 import com.upl.tutorial.model.Course;
+import com.upl.tutorial.model.CourseHistory;
 import com.upl.tutorial.model.CourseStatus;
 import com.upl.tutorial.model.User;
 import com.upl.tutorial.model.UserStatus;
+import com.upl.tutorial.repository.CourseHistoryRepo;
 import com.upl.tutorial.repository.CourseRepo;
 import com.upl.tutorial.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
+@RequiredArgsConstructor
 @Service
 public class CourseService {
 
-    @Autowired
-    CourseRepo courseRepo;
+    private final CourseRepo courseRepo;
 
-    @Autowired
-    UserRepository userRepo;
+    private final UserRepository userRepo;
+
+    private final CourseHistoryRepo courseHistoryRepo;
 
     public int createCourse(CourseRequest request) {
 
         User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
-                () -> new InstructorNotActiveException("Instructor not approved for id " + request.getInstructorId()));
+                () -> new ResourceNotFoundException("Instructor not found for id "
+                        + request.getInstructorId()));
         if (instructor.getStatus().equals(UserStatus.Active)) {
             Course course = new Course();
             course.setInstructor(instructor);
@@ -58,7 +67,7 @@ public class CourseService {
 
     public List<CourseResponse> getCoursesByInstructor(int instructor_id) {
 
-        List<Course> courseList = courseRepo.findByInstructor_UserId(instructor_id);
+        List<Course> courseList = courseRepo.findByInstructor_UserIdAndStatus(instructor_id,CourseStatus.Active);
         System.out.println(" Courses list :" + courseList);
         List<CourseResponse> responseList = courseList.stream()
                 .map(course -> new CourseResponse(course.getcourseId(), course.getTitle(),
@@ -94,6 +103,54 @@ public class CourseService {
             return dto;
         });
         return responsePage;
+    }
+
+    @Transactional
+    public void updateCourse(CourseManageRequest request) {
+        Course course =courseRepo.findById(request.getCourseId())
+        .orElseThrow(()->new ResourceNotFoundException(
+            "Course is not present for course id:"+request.getCourseId()));
+       
+        User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
+                () -> new ResourceNotFoundException("Instructor not found for id " 
+                + request.getInstructorId()));
+            
+
+        if (null != request.getDescription() && !request.getDescription().isBlank())
+        course.setDescription(request.getDescription());
+
+        if (null != request.getTitle() && !request.getTitle().isBlank())
+        course.setTitle(request.getTitle());
+        
+        CourseHistory courseHistory=new CourseHistory();
+        courseHistory.setCourse(course);
+        courseHistory.setInstructor(instructor);
+        courseHistory.setChanges(request.getChanges());
+        courseHistory.setmodifiedAt(LocalDateTime.now());
+        courseHistoryRepo.save(courseHistory);
+
+    }
+
+    @Transactional
+    public void deleteCourse(CourseManageRequest request) {
+
+         Course course =courseRepo.findById(request.getCourseId())
+        .orElseThrow(()->new ResourceNotFoundException(
+            "Course is not present for course id:"+request.getCourseId()));
+       
+        User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
+                () -> new ResourceNotFoundException("Instructor not found for id " 
+                + request.getInstructorId()));
+
+        course.setStatus(CourseStatus.Inactive);
+
+        CourseHistory courseHistory=new CourseHistory();
+        courseHistory.setCourse(course);
+        courseHistory.setInstructor(instructor);
+        courseHistory.setChanges(request.getChanges());
+        courseHistory.setmodifiedAt(LocalDateTime.now());
+        courseHistoryRepo.save(courseHistory);
+
     }
 
 }

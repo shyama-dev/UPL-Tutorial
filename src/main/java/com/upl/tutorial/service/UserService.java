@@ -17,19 +17,20 @@ import com.upl.tutorial.model.UserRole;
 import com.upl.tutorial.model.UserStatus;
 import com.upl.tutorial.repository.InstructorApprovalRepo;
 import com.upl.tutorial.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    UserRepository userRepo;
+    private final UserRepository userRepo;
 
-    @Autowired
-    InstructorApprovalRepo repo;
+    private final InstructorApprovalRepo repo;
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserResponse register(UserRequest request) {
         User user = new User();

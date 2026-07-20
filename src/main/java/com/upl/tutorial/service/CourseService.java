@@ -3,14 +3,12 @@ package com.upl.tutorial.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.upl.tutorial.constants.UserConstants;
 import com.upl.tutorial.dto.CourseManageRequest;
 import com.upl.tutorial.dto.CoursePageRequest;
 import com.upl.tutorial.dto.CoursePageResponse;
@@ -18,11 +16,11 @@ import com.upl.tutorial.dto.CourseRequest;
 import com.upl.tutorial.dto.CourseResponse;
 import com.upl.tutorial.dto.InstructorResponse;
 import com.upl.tutorial.exception.InstructorNotActiveException;
-import com.upl.tutorial.exception.ResourceNotFoundException;
+import com.upl.tutorial.exception.EntityNotFoundException;
 import com.upl.tutorial.model.Course;
 import com.upl.tutorial.model.CourseHistory;
 import com.upl.tutorial.model.CourseStatus;
-import com.upl.tutorial.model.User;
+import com.upl.tutorial.model.Users;
 import com.upl.tutorial.model.UserStatus;
 import com.upl.tutorial.repository.CourseHistoryRepo;
 import com.upl.tutorial.repository.CourseRepo;
@@ -43,8 +41,8 @@ public class CourseService {
 
     public int createCourse(CourseRequest request) {
 
-        User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
-                () -> new ResourceNotFoundException("Instructor not found for id "
+        Users instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
+                () -> new EntityNotFoundException("Instructor not found for id "
                         + request.getInstructorId()));
         if (instructor.getStatus().equals(UserStatus.Active)) {
             Course course = new Course();
@@ -108,11 +106,11 @@ public class CourseService {
     @Transactional
     public void updateCourse(CourseManageRequest request) {
         Course course =courseRepo.findById(request.getCourseId())
-        .orElseThrow(()->new ResourceNotFoundException(
+        .orElseThrow(()->new EntityNotFoundException(
             "Course is not present for course id:"+request.getCourseId()));
        
-        User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
-                () -> new ResourceNotFoundException("Instructor not found for id " 
+        Users instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
+                () -> new EntityNotFoundException("Instructor not found for id " 
                 + request.getInstructorId()));
             
 
@@ -135,11 +133,11 @@ public class CourseService {
     public void deleteCourse(CourseManageRequest request) {
 
          Course course =courseRepo.findById(request.getCourseId())
-        .orElseThrow(()->new ResourceNotFoundException(
+        .orElseThrow(()->new EntityNotFoundException(
             "Course is not present for course id:"+request.getCourseId()));
        
-        User instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
-                () -> new ResourceNotFoundException("Instructor not found for id " 
+        Users instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
+                () -> new EntityNotFoundException("Instructor not found for id " 
                 + request.getInstructorId()));
 
         course.setStatus(CourseStatus.Inactive);

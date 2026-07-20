@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.upl.tutorial.dto.LoginRequest;
 import com.upl.tutorial.dto.UserRequest;
 import com.upl.tutorial.dto.UserResponse;
+import com.upl.tutorial.service.AuthService;
 import com.upl.tutorial.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserController {
 
     
     private final UserService service;
+    private final AuthService authService;
 
      @GetMapping("/")
      public String greet(){
@@ -40,9 +42,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-     public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request){
-        UserResponse userResponse=service.login(request.getEmail(), request.getPassword());
-        return new ResponseEntity<>(userResponse,HttpStatus.OK);
+     public ResponseEntity<String> login(@RequestBody LoginRequest request){
+        String response=authService.login(request.getEmail(), request.getPassword());
+        return new ResponseEntity<>(response,HttpStatus.OK);
      }
     
 }

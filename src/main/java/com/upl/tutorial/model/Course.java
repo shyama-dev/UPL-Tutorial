@@ -29,7 +29,7 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", nullable = false)
-    private User instructor;
+    private Users instructor;
 
     @Enumerated(EnumType.STRING)
     private CourseStatus status;
@@ -40,7 +40,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(int courseId, String title, String description, User instructor, CourseStatus status,
+    public Course(int courseId, String title, String description, Users instructor, CourseStatus status,
             LocalDateTime createdAt) {
         this.courseId = courseId;
         this.title = title;
@@ -74,11 +74,11 @@ public class Course {
         this.description = description;
     }
 
-    public User getInstructor() {
+    public Users getInstructor() {
         return instructor;
     }
 
-    public void setInstructor(User instructor) {
+    public void setInstructor(Users instructor) {
         this.instructor = instructor;
     }
 

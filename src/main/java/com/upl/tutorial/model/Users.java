@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +33,10 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public User() {
+    public Users() {
     }
 
-    public User(int userId, String name, String email, String password, UserRole role, UserStatus status,
+    public Users(int userId, String name, String email, String password, UserRole role, UserStatus status,
             LocalDateTime createdAt) {
         this.userId = userId;
         this.name = name;

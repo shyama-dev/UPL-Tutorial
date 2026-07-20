@@ -3,24 +3,22 @@ package com.upl.tutorial.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.upl.tutorial.dto.TutorialManageRequest;
 import com.upl.tutorial.dto.TutorialRequest;
 import com.upl.tutorial.dto.TutorialResponse;
-import com.upl.tutorial.exception.ResourceNotFoundException;
+import com.upl.tutorial.exception.EntityNotFoundException;
 import com.upl.tutorial.model.Course;
 import com.upl.tutorial.model.Tutorial;
 import com.upl.tutorial.model.TutorialHistory;
-import com.upl.tutorial.model.User;
+import com.upl.tutorial.model.Users;
 import com.upl.tutorial.repository.CourseRepo;
 import com.upl.tutorial.repository.TutorialHistoryRepo;
 import com.upl.tutorial.repository.TutorialRepository;
 import com.upl.tutorial.repository.UserRepository;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class TutorialService {
     public int create(TutorialRequest request) {
         Tutorial tutorial =new Tutorial();
         Course course =courseRepo.findById(request.getCourseId()).orElseThrow(()->
-        new ResourceNotFoundException("Course not found for id :"+request.getCourseId()));
+        new EntityNotFoundException("Course not found for id :"+request.getCourseId()));
         tutorial.setCourse(course);
         tutorial.setTitle(request.getTitle());
         tutorial.setyoutubeLink(request.getYoutubeLink());
@@ -67,7 +65,7 @@ public class TutorialService {
     public void updateTutorial(TutorialManageRequest request) {
 
     Tutorial tutorial =tutorialRepo.findById(request.getTutorialId()).orElseThrow(()->
-        new ResourceNotFoundException("Tutorial not found for id :"+request.getTutorialId()));
+        new EntityNotFoundException("Tutorial not found for id :"+request.getTutorialId()));
         
         if (null != request.getContent() && !request.getContent().isBlank())
         tutorial.setContent(request.getContent());
@@ -78,8 +76,8 @@ public class TutorialService {
         if (null != request.getYoutubeLink() && !request.getYoutubeLink().isBlank())
             tutorial.setyoutubeLink(request.getYoutubeLink());
 
-         User user =userRepo.findById(request.getInstructorId()).orElseThrow(()->
-        new ResourceNotFoundException("Instructor not found for id :"+request.getInstructorId()));
+         Users user =userRepo.findById(request.getInstructorId()).orElseThrow(()->
+        new EntityNotFoundException("Instructor not found for id :"+request.getInstructorId()));
 
         TutorialHistory tutorialHistory= new TutorialHistory();
         tutorialHistory.setTutorial(tutorial);
@@ -89,6 +87,6 @@ public class TutorialService {
         tutorialHistoryRepo.save(tutorialHistory);
     }
 
-    
+
     
 }

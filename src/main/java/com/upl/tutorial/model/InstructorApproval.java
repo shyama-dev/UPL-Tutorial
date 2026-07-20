@@ -27,12 +27,12 @@ public class InstructorApproval {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="instructor_id" , nullable=false)
-    private User instructor;
+    private Users instructor;
     
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="admin_id" , nullable=false)
-    private User admin;
+    private Users admin;
 
     @Enumerated(EnumType.STRING)
     private ApprovalStatus status;
@@ -45,7 +45,7 @@ public class InstructorApproval {
     public InstructorApproval() {
     }
 
-    public InstructorApproval(int logId, User instructor, User admin, ApprovalStatus status, String remarks,
+    public InstructorApproval(int logId, Users instructor, Users admin, ApprovalStatus status, String remarks,
             LocalDateTime timestamp) {
         this.logId = logId;
         this.instructor = instructor;
@@ -63,19 +63,19 @@ public class InstructorApproval {
         this.logId = logId;
     }
 
-    public User getInstructor() {
+    public Users getInstructor() {
         return instructor;
     }
 
-    public void setInstructor(User instructor) {
+    public void setInstructor(Users instructor) {
         this.instructor = instructor;
     }
 
-    public User getAdmin() {
+    public Users getAdmin() {
         return admin;
     }
 
-    public void setAdmin(User admin) {
+    public void setAdmin(Users admin) {
         this.admin = admin;
     }
 

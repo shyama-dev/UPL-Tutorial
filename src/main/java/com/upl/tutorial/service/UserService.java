@@ -10,14 +10,15 @@ import com.upl.tutorial.constants.UserConstants;
 import com.upl.tutorial.dto.InstructorApproveRequest;
 import com.upl.tutorial.dto.UserRequest;
 import com.upl.tutorial.dto.UserResponse;
-import com.upl.tutorial.exception.ResourceNotFoundException;
+import com.upl.tutorial.exception.EntityNotFoundException;
 import com.upl.tutorial.model.InstructorApproval;
-import com.upl.tutorial.model.User;
+import com.upl.tutorial.model.Users;
 import com.upl.tutorial.model.UserRole;
 import com.upl.tutorial.model.UserStatus;
 import com.upl.tutorial.repository.InstructorApprovalRepo;
 import com.upl.tutorial.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,7 +34,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserResponse register(UserRequest request) {
-        User user = new User();
+        Users user = new Users();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -41,15 +42,15 @@ public class UserService {
         user.setStatus(UserStatus.Pending);
         user.setcreatedAt(LocalDateTime.now());
 
-        User userSaved = userRepo.save(user);
+        Users userSaved = userRepo.save(user);
         System.out.println("userSaved  :" + userSaved);
         return new UserResponse(userSaved.getuserId());
 
     }
 
-    public UserResponse login(String email, String password) {
+/*     public UserResponse login(String email, String password) {
         UserResponse userResponse = new UserResponse();
-        User user = userRepo.findByEmail(email);
+        Users user;// = userRepo.findByEmail(email);
         if (null == user) {
             userResponse.setResponseMessage(UserConstants.USER_NOT_FOUND);
             return userResponse;
@@ -66,26 +67,28 @@ public class UserService {
         }
         return userResponse;
 
-    }
-
+    } */
+ 
+    @Transactional
     public void approveInstructor(InstructorApproveRequest request, UserStatus status) {
-        int rowsModified =userRepo.updateStatusByUserId(request.getUserId(),status);
-        if(rowsModified == 0)
-            throw new ResourceNotFoundException("Instructor Not Found for this id :"+request.getUserId());
-        InstructorApproval approvalrequest=new InstructorApproval();
+       
         List<Integer> userIdList =List.of(request.getUserId(),request.getAdminId());
-        List<User> usersList=userRepo.findAllById(userIdList);
+        List<Users> usersList=userRepo.findAllById(userIdList);
         
-        User instructor =usersList.stream()
+        Users instructor =usersList.stream()
         .filter(user->"Instructor".equalsIgnoreCase(user.getRole().name()))
-        .findFirst().orElseThrow(()->new ResourceNotFoundException(
+        .findFirst().orElseThrow(()->new EntityNotFoundException(
             "Instructor Not found for id :"+request.getUserId()));
 
-         User admin =usersList.stream()
+         Users admin =usersList.stream()
         .filter(user->"Admin".equalsIgnoreCase(user.getRole().name()))
-        .findFirst().orElseThrow(()->new ResourceNotFoundException(
-            "Admin Not found for id :"+request.getAdminId()));        
+        .findFirst().orElseThrow(()->new EntityNotFoundException(
+            "Admin Not found for id :"+request.getAdminId()));      
         
+         //updating status to approved   
+        instructor.setStatus(status);
+
+        InstructorApproval approvalrequest=new InstructorApproval();
         approvalrequest.setInstructor(instructor);
         approvalrequest.setAdmin(admin);
         approvalrequest.setRemarks(request.getRemarks());

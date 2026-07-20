@@ -27,7 +27,7 @@ public class TutorialHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", nullable = false)
-    private User instructor;
+    private Users instructor;
 
     private String changes;
     
@@ -38,7 +38,7 @@ public class TutorialHistory {
     public TutorialHistory() {
     }
     
-    public TutorialHistory(int historyId, Tutorial tutorial, User instructor, String changes,
+    public TutorialHistory(int historyId, Tutorial tutorial, Users instructor, String changes,
             LocalDateTime modifiedAt) {
         this.historyId = historyId;
         this.tutorial = tutorial;
@@ -64,11 +64,11 @@ public class TutorialHistory {
         this.tutorial = tutorial;
     }
 
-    public User getInstructor() {
+    public Users getInstructor() {
         return instructor;
     }
 
-    public void setInstructor(User instructor) {
+    public void setInstructor(Users instructor) {
         this.instructor = instructor;
     }
 

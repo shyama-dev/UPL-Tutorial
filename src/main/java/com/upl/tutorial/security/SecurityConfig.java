@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .formLogin(form -> form.disable())
                         // 3. Disable HTTP Basic authentication popup
                         // .httpBasic(basic -> basic.disable())
-                        .httpBasic(Customizer.withDefaults())
+                        //.httpBasic(Customizer.withDefaults())
                         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authenticationProvider(authenticationProvider())
                         // Add JWT filter before Spring Security's default filter

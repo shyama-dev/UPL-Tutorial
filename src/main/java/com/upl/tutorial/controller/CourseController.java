@@ -24,10 +24,12 @@ import com.upl.tutorial.service.CourseService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/courses")
 @RequiredArgsConstructor
+@Slf4j
 public class CourseController {
 
      
@@ -35,6 +37,7 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<Page<CoursePageResponse>> getActiveCourses(CoursePageRequest request){
+      log.info("Fetching Active Courses");
       Page<CoursePageResponse> courses =service.getActiveCourses(request);
 
       return ResponseEntity.status(HttpStatus.OK).body(courses);

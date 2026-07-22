@@ -17,8 +17,8 @@ public class CourseManageRequest {
     
     private String description;
 
-    @Min(value = 1, message = "Instructor ID must be at least 1")
-    private int instructorId;
+    // @Min(value = 1, message = "Instructor ID must be at least 1")
+    // private int instructorId;
 
     private String changes;
 }

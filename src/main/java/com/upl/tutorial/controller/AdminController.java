@@ -2,6 +2,8 @@ package com.upl.tutorial.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +27,10 @@ public class AdminController {
 
     @PostMapping("/approve")
     public ResponseEntity<String> approveInstructor( @Valid @RequestBody InstructorApproveRequest request) {
+          
         request.setStatus(ApprovalStatus.Approved); 
-        service.approveInstructor(request, UserStatus.Active);
+        service.approveInstructor(request, UserStatus.Active);        
+
         return ResponseEntity.ok("Instructor Approved");
     }
 

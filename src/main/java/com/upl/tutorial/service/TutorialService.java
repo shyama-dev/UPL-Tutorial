@@ -34,7 +34,6 @@ public class TutorialService {
      private final TutorialHistoryRepo tutorialHistoryRepo;
 
 
-
     public int create(TutorialRequest request) {
         Tutorial tutorial =new Tutorial();
         Course course =courseRepo.findById(request.getCourseId()).orElseThrow(()->
@@ -45,7 +44,6 @@ public class TutorialService {
         tutorial.setContent(request.getContent());
         tutorial.setcreatedAt(LocalDateTime.now());
         Tutorial savedTutorial=tutorialRepo.save(tutorial);
-        System.out.println(" Saved tutorial ::"+savedTutorial);
         return savedTutorial.gettutorialId();
 
     }
@@ -56,7 +54,6 @@ public class TutorialService {
         List<TutorialResponse> tutorialsList = tutorials.stream().map(tutorial -> 
             new TutorialResponse(tutorial.gettutorialId(),courseId,tutorial.getTitle(),
             tutorial.getContent(),tutorial.getyoutubeLink(),tutorial.getcreatedAt())).toList();
-         System.out.println(" tutorialsList  ::"+tutorialsList);
 
         return tutorialsList;
     }

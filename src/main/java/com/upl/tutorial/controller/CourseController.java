@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,56 +26,59 @@ import com.upl.tutorial.service.CourseService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/courses")
 @RequiredArgsConstructor
-@Slf4j
 public class CourseController {
 
-     
-    private final CourseService service;
+   private final CourseService service;
 
-    @GetMapping
-    public ResponseEntity<Page<CoursePageResponse>> getActiveCourses(CoursePageRequest request){
-      log.info("Fetching Active Courses");
-      Page<CoursePageResponse> courses =service.getActiveCourses(request);
+   @GetMapping
+   public ResponseEntity<Page<CoursePageResponse>> getActiveCourses(CoursePageRequest request) {
 
-      return ResponseEntity.status(HttpStatus.OK).body(courses);
-   
-     }
-
-     @GetMapping("/instructor")
-     public ResponseEntity<List<CourseResponse>> getCoursesByInstructor(@RequestParam int instructorId){
-      List<CourseResponse> courses =service.getCoursesByInstructor(instructorId);
+      Page<CoursePageResponse> courses = service.getActiveCourses(request);
+      if (courses.isEmpty()) {
+         return ResponseEntity.noContent().build();
+      }
 
       return ResponseEntity.status(HttpStatus.OK).body(courses);
-   
-     }
 
-     @PostMapping("/create")
-     public ResponseEntity<Integer> createCourse(@RequestBody CourseRequest request){
-        System.out.println("**CourseRequest**** :"+request);
-        int courseId =service.createCourse(request);
+   }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Integer.valueOf(courseId));        
-     }
+   @GetMapping("/instructor")
+   public ResponseEntity<List<CourseResponse>> getCoursesByInstructor(@RequestParam int instructorId) {
+      List<CourseResponse> courses = service.getCoursesByInstructor(instructorId);
+      if (courses.isEmpty()) {
+         return ResponseEntity.noContent().build();
+      }
 
-     @PutMapping
-     public ResponseEntity<String> updateCourse(@Valid @RequestBody CourseManageRequest request){
+      return ResponseEntity.status(HttpStatus.OK).body(courses);
+
+   }
+
+   @PostMapping("/create")
+   public ResponseEntity<Integer> createCourse(@Valid @RequestBody CourseRequest request) {
+
+      int courseId = service.createCourse(request);
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(Integer.valueOf(courseId));
+   }
+
+   @PutMapping
+   public ResponseEntity<String> updateCourse(@Valid @RequestBody CourseManageRequest request) {
 
       service.updateCourse(request);
 
       return ResponseEntity.ok(" Sucessfully Updated the Course");
-     }
+   }
 
-     @DeleteMapping
-     public ResponseEntity<String> deleteCourse ( @RequestBody CourseManageRequest request){
+   @DeleteMapping
+   public ResponseEntity<String> deleteCourse(@Valid @RequestBody CourseManageRequest request) {
 
       service.deleteCourse(request);
 
       return ResponseEntity.ok("Sucessfully Deleted the Course");
-     }
-    
+   }
+
 }

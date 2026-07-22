@@ -12,6 +12,7 @@ public class TutorialManageRequest {
 
     @Min(value = 1, message = "Instructor ID must be at least 1")
     private int instructorId;
+    
      @Min(value = 1, message = "Instructor ID must be at least 1")
     private int tutorialId;
 

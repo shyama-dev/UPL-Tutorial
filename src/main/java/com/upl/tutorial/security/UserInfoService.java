@@ -11,19 +11,25 @@ import com.upl.tutorial.model.Users;
 import com.upl.tutorial.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 //@RequiredArgsConstructor
 public class UserInfoService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
+    
+    private final UserRepository userRepository;    
+
+    public UserInfoService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Users user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
-        System.out.println("********UserDetailsService *****************");
-        // Wrap and return as Spring Security's UserDetails
+        log.info("********UserDetailsService *****************");
+
         return new UserInfoDetails(user);
     }
     

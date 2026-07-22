@@ -52,7 +52,6 @@ public class CourseService {
             course.setTitle(request.getTitle());
             course.setcreatedAt(LocalDateTime.now());
             Course savedCourse = courseRepo.save(course);
-            System.out.println(" Saved Course :" + savedCourse);
             return savedCourse.getcourseId();
 
         } else {
@@ -66,12 +65,12 @@ public class CourseService {
     public List<CourseResponse> getCoursesByInstructor(int instructor_id) {
 
         List<Course> courseList = courseRepo.findByInstructor_UserIdAndStatus(instructor_id,CourseStatus.Active);
-        System.out.println(" Courses list :" + courseList);
         List<CourseResponse> responseList = courseList.stream()
                 .map(course -> new CourseResponse(course.getcourseId(), course.getTitle(),
                         course.getDescription(), course.getInstructor().getuserId(),
                         course.getStatus().name(), course.getcreatedAt()))
                 .toList();
+                
         return responseList;
     }
 
@@ -83,7 +82,6 @@ public class CourseService {
 
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
         Page<Course> courseList = courseRepo.findAllByStatus(CourseStatus.Active, pageable);
-        System.out.println(" Courses list :" + courseList);
 
         Page<CoursePageResponse> responsePage = courseList.map(course -> {
             CoursePageResponse dto = new CoursePageResponse();
@@ -108,11 +106,7 @@ public class CourseService {
         Course course =courseRepo.findById(request.getCourseId())
         .orElseThrow(()->new EntityNotFoundException(
             "Course is not present for course id:"+request.getCourseId()));
-       
-        Users instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
-                () -> new EntityNotFoundException("Instructor not found for id " 
-                + request.getInstructorId()));
-            
+              
 
         if (null != request.getDescription() && !request.getDescription().isBlank())
         course.setDescription(request.getDescription());
@@ -122,7 +116,7 @@ public class CourseService {
         
         CourseHistory courseHistory=new CourseHistory();
         courseHistory.setCourse(course);
-        courseHistory.setInstructor(instructor);
+        courseHistory.setInstructor(course.getInstructor());
         courseHistory.setChanges(request.getChanges());
         courseHistory.setmodifiedAt(LocalDateTime.now());
         courseHistoryRepo.save(courseHistory);
@@ -136,15 +130,12 @@ public class CourseService {
         .orElseThrow(()->new EntityNotFoundException(
             "Course is not present for course id:"+request.getCourseId()));
        
-        Users instructor = userRepo.findById(request.getInstructorId()).orElseThrow(
-                () -> new EntityNotFoundException("Instructor not found for id " 
-                + request.getInstructorId()));
-
+    
         course.setStatus(CourseStatus.Inactive);
 
         CourseHistory courseHistory=new CourseHistory();
         courseHistory.setCourse(course);
-        courseHistory.setInstructor(instructor);
+        courseHistory.setInstructor(course.getInstructor());
         courseHistory.setChanges(request.getChanges());
         courseHistory.setmodifiedAt(LocalDateTime.now());
         courseHistoryRepo.save(courseHistory);

@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,22 +42,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        
         http
-                // 4. Disable CSRF (usually needed if you are testing POST/PUT APIs)
                 .csrf(csrf -> csrf.disable()
-                        // 1. Allow absolutely every URL without authentication
                         .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/instructors/**").permitAll()
+                            //public endpoints
+                                .requestMatchers("/instructors/**","/error").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/courses").permitAll()
+                                //admin end points
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/courses/**","/tutorials/**").hasRole("INSTRUCTOR")                                
                                 .anyRequest().authenticated())
-                        // 2. Disable the default login form completely
                         .formLogin(form -> form.disable())
-                        // 3. Disable HTTP Basic authentication popup
-                        // .httpBasic(basic -> basic.disable())
-                        //.httpBasic(Customizer.withDefaults())
                         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authenticationProvider(authenticationProvider())
-                        // Add JWT filter before Spring Security's default filter
                         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
                 );

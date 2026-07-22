@@ -20,11 +20,11 @@ public class UserInfoDetails implements UserDetails {
         this.userName = userInfo.getEmail(); // Use email as username
         this.password = userInfo.getPassword();
         String roleName = "ROLE_" + userInfo.getRole().name();
+        System.out.println("****  roleName *** :"+roleName);
         this.authorities = List.of(roleName)
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-                System.out.println(" inside User info details contrutor");
 
     }
 

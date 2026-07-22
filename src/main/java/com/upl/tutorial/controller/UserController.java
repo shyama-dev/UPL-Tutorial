@@ -15,6 +15,7 @@ import com.upl.tutorial.dto.UserResponse;
 import com.upl.tutorial.service.AuthService;
 import com.upl.tutorial.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -34,7 +35,7 @@ public class UserController {
      }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRequest request){
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest request){
         UserResponse userResponse = service.register(request);
 
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED); 
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-     public ResponseEntity<String> login(@RequestBody LoginRequest request){
+     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request){
         String response=authService.login(request.getEmail(), request.getPassword());
         return new ResponseEntity<>(response,HttpStatus.OK);
      }

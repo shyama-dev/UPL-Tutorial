@@ -3,10 +3,8 @@ package com.upl.tutorial.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.upl.tutorial.constants.UserConstants;
 import com.upl.tutorial.dto.InstructorApproveRequest;
 import com.upl.tutorial.dto.UserRequest;
 import com.upl.tutorial.dto.UserResponse;
@@ -38,36 +36,15 @@ public class UserService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(UserRole.Instructor);
+        user.setRole(UserRole.INSTRUCTOR);
         user.setStatus(UserStatus.Pending);
         user.setcreatedAt(LocalDateTime.now());
 
         Users userSaved = userRepo.save(user);
-        System.out.println("userSaved  :" + userSaved);
         return new UserResponse(userSaved.getuserId());
 
     }
 
-/*     public UserResponse login(String email, String password) {
-        UserResponse userResponse = new UserResponse();
-        Users user;// = userRepo.findByEmail(email);
-        if (null == user) {
-            userResponse.setResponseMessage(UserConstants.USER_NOT_FOUND);
-            return userResponse;
-        }
-        userResponse.setRole(user.getRole().name());
-        userResponse.setUserId(user.getuserId());
-
-        if (passwordEncoder.matches(password, user.getPassword())) {
-
-            userResponse.setResponseMessage(user.getStatus().name());
-
-        } else {
-            userResponse.setResponseMessage(UserConstants.USER_INCORRECT_PASSWORD);
-        }
-        return userResponse;
-
-    } */
  
     @Transactional
     public void approveInstructor(InstructorApproveRequest request, UserStatus status) {

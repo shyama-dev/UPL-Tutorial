@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,11 +33,14 @@ public class TutorialController {
     public ResponseEntity<List<TutorialResponse>> tutorials(@RequestParam int courseId){
 
         List<TutorialResponse> tutorials = service.fetchTutorials(courseId);
+        if (tutorials.isEmpty()) {
+         return ResponseEntity.noContent().build();
+      } 
         return ResponseEntity.ok(tutorials);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Integer> create(@RequestBody TutorialRequest request){
+    public ResponseEntity<Integer> create(@Valid@RequestBody TutorialRequest request){
 
         int tutorialId = service.create(request);
         return ResponseEntity.ok(tutorialId);
@@ -49,5 +53,6 @@ public class TutorialController {
         service.updateTutorial(request);
          return ResponseEntity.ok("Sucessfully updated the tutorial");
     }
-    
+
+       
 }
